@@ -79,6 +79,17 @@ def registrar(request):
 def principal(request):
 	return render(request, 'main/principal.html', {})
 
+def saldo(request):
+	cuenta_obj = Cuenta.objects.get(no_cuenta=request.session['no_cuenta'])
+	transferencias_obj = Transferencia.objects.all().filter(no_cuenta_origen=request.session['no_cuenta'])
+	debitos_creditos_obj = Transaccion.objects.all().filter(no_cuenta=request.session['no_cuenta'])
+	context = {
+		'cuenta' : cuenta_obj,
+		'transferencias' : transferencias_obj,
+		'debitos_creditos' : debitos_creditos_obj
+	}
+	return render(request, 'main/saldo.html', context)
+
 def transferir(request):
 	context = {}
 	if request.method == 'POST':

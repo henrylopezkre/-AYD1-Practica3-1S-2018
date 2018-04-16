@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="container" style="width: 100%; height: 525px; margin-top: 80px; background-color: #ffffff">
+    <div class="row text-center">
+        <h4><br/></h4><hr/><br/>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            {% if error %}
+                <div class="alert alert-danger alert-dismissible small" role="alert" id="mensaje">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p>¡ERROR! <strong>{{ error }}</strong></p>
+                </div>
+            {% elif mensaje %}
+                <div class="alert alert-success alert-dismissible small" role="alert" id="mensaje">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p><strong>{{ mensaje }}</strong></p>
+                </div>            
+            {% endif %}
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                <h3><a href="#" style="text-decoration:none;cursor:pointer;">Crédito y débito</a></h3>
+                <br/>
+                <div class="form-group">
+                    <div class="dropdown col-sm-offset-2 col-sm-8">
+                        <button id="btn_genero" name="tipo" class="btn btn-default dropdown-toggle"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span id="spn_genero" style="padding-right: 10px;">Seleccione...</span>
+                            <input id="txt_genero" type="hidden" name="tipo_descripcion"/>
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="ddm_genero" class="dropdown-menu col-md-8" aria-labelledby="tipo" readonly>
+                            <li><a href="#">Crédito</a></li>
+                            <li><a href="#">Débito</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-right: 5px; margin-left: 0px;">
+                    <div class="input-group col-sm-offset-2 col-sm-8 text-right">
+                        <div class="input-group-addon">#</div>
+                        <input type="number" min="0" max="9999999999" maxlength="10" name="no_cuenta" class="form-control" placeholder="Ingrese el no. de cuenta" required/>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-right: 5px; margin-left: 0px;">
+                    <div class="input-group col-sm-offset-2 col-sm-8 text-right">
+                        <div class="input-group-addon">$</div>
+                        <input type="number" min="0" max="99999" maxlength="5" name="monto" class="form-control" placeholder="Ingrese el monto" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8 text-right">
+                        <textarea class="form-control" rows="3" placeholder="Ingrese una breve descripcion" name="descripcion" required="true" style="resize: none"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-8 text-right">
+                        <button type="submit" class="form-control btn btn-primary">Realizar operación</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <hr/>
+</div>
+{% endblock %}

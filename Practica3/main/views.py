@@ -108,6 +108,51 @@ def transferir(request):
 		return render(request, 'main/transferir.html', context)
 	return render(request, 'main/transferir.html', {})
 
+def debito_credito(request):
+	context = {}
+	if request.method == 'POST':
+		#DEBITO_CREDITO
+		tipo = request.POST.get('tipo_descripcion', '')
+		no_cuenta = request.POST.get('no_cuenta', '')
+		cuenta_obj = Cuenta.objects.all().filter(no_cuenta=no_cuenta).first()
+		monto = request.POST.get('monto', '')
+		descripcion = request.POST.get('descripcion', '')
+		tipo_obj = Tipo.objects.get(descripcion=tipo)
+		if cuenta_obj is None:
+			context = {
+				'error' : 'El No. de cuenta no existe.'
+			}
+		else:
+			cuenta1_obj = Cuenta.objects.get(no_cuenta=request.session['no_cuenta'])
+			if tipo_obj.cod_tipo == 1:
+				#if float(monto) > cuenta1_obj.cantidad:
+					#context = {
+					#	'error' : 'El monto solicitado es mayor al saldo de su cuenta.'
+					#}
+				#else:
+					#cuenta1_obj.cantidad = cuenta1_obj.cantidad-float(monto)
+					#cuenta1_obj.save()
+					cuenta_obj.cantidad = cuenta_obj.cantidad+float(monto)
+					cuenta_obj.save()
+					context = {
+						'mensaje' : "Operación realizada correctamente."
+					}
+			elif tipo_obj.cod_tipo == 2:
+				if float(monto) > cuenta_obj.cantidad:
+					context = {
+						'error' : 'El monto solicitado es mayor al saldo de la cuenta a debitar.'
+					}
+				else:
+					cuenta_obj.cantidad = cuenta_obj.cantidad-float(monto)
+					cuenta_obj.save()
+					context = {
+						'mensaje' : "Operación realizada correctamente."
+					}
+			transaccion_obj = Transaccion(no_cuenta=cuenta_obj, monto=monto, descripcion=descripcion, cod_tipo=tipo_obj)
+			transaccion_obj.save()
+		return render(request, 'main/debito_credito.html', context)
+	return render(request, 'main/debito_credito.html', {})
+
 def obtener_no_cuenta():
 	cuenta = Cuenta.objects.all().last()
 	return cuenta.no_cuenta+1

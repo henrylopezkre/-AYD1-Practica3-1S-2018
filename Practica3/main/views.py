@@ -79,6 +79,35 @@ def registrar(request):
 def principal(request):
 	return render(request, 'main/principal.html', {})
 
+def transferir(request):
+	context = {}
+	if request.method == 'POST':
+		no_cuenta = request.POST.get('no_cuenta', '')
+		cuenta_obj_d = Cuenta.objects.all().filter(no_cuenta=no_cuenta).first()
+		cuenta_obj_o = Cuenta.objects.get(no_cuenta=request.session['no_cuenta'])
+		monto = request.POST.get('monto', '')
+		if cuenta_obj_d is None:
+			context = {
+				'error' : 'El No. de cuenta no existe.'
+			}
+		else:
+			if float(monto) > cuenta_obj_o.cantidad:
+				context = {
+					'error' : 'El monto solicitado es mayor al saldo de su cuenta.'
+				}
+			else:
+				cuenta_obj_o.cantidad = cuenta_obj_o.cantidad-float(monto)
+				cuenta_obj_o.save()
+				cuenta_obj_d.cantidad = cuenta_obj_d.cantidad+float(monto)
+				cuenta_obj_d.save()
+				transferencia_obj = Transferencia(no_cuenta_origen=cuenta_obj_o, no_cuenta_destino=cuenta_obj_d, monto=monto)
+				transferencia_obj.save()
+				context = {
+					'mensaje' : "Transferencia realizada correctamente."
+				}
+		return render(request, 'main/transferir.html', context)
+	return render(request, 'main/transferir.html', {})
+
 def obtener_no_cuenta():
 	cuenta = Cuenta.objects.all().last()
 	return cuenta.no_cuenta+1

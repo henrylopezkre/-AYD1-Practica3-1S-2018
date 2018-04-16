@@ -34,7 +34,7 @@
                             <tbody>
                                 {% for t in transferencias %}
                                 <tr>
-                                    <td>{{ t.no_cuenta_origen.no_cuenta }}</td>
+                                    <td>{{ t.no_cuenta_destino.no_cuenta }}</td>
                                     <td>{{ t.fecha_hora }}</td>
                                     <td>${{ t.monto|stringformat:'.2f'|intcomma }}</td>
                                 </tr>

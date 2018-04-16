@@ -43,8 +43,8 @@ class Transaccion(models.Model):
 
 
 class Transferencia(models.Model):
-    no_cuenta_origen = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_origen', related_name='cuenta_origen')
-    no_cuenta_destino = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_destino', related_name='cuenta_destino')
+    no_cuenta_origen = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_origen', related_name='cuenta_origen', primary_key=True)
+    no_cuenta_destino = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_destino', related_name='cuenta_destino', primary_key=True)
     fecha_hora = models.DateTimeField(default=datetime.now, blank=True, primary_key=True)
     monto = models.FloatField()
 

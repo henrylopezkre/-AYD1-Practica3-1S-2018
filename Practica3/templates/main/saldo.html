@@ -1,0 +1,93 @@
+{% extends 'main/base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container" style="width: 100%; height: 525px; margin-top: 80px; background-color: #ffffff">
+    <div class="row text-center">
+        <h4><br/></h4><hr/>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form method="post" class="form-horizontal">
+                <div class="form-horizontal text-center" style="margin-top: 25px">
+                    <h3><a href="#" style="text-decoration:none;cursor:pointer;">Saldo</a></h3>
+                    <h3><a href="#" style="text-decoration:none;cursor:pointer;">${{ cuenta.cantidad|stringformat:'.2f'|intcomma }}</a></h3>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row text-center">
+        <hr/>
+        <div class="col-md-6">
+            <div class="form-horizontal text-center" style="margin-top: 25px">
+                <h3><a href="#" style="text-decoration:none;cursor:pointer;">Transferencias electrónicas</a></h3>
+                <br/>
+                {% if transferencias.count > 0 %}
+                    <div class="form-horizontal pre-scrollable" style="height: 150px;">
+                        <table class="table text-center table-hover table-striped table-bordered">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>No. cuenta destino</th>
+                                    <th>Fecha y hora</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in transferencias %}
+                                <tr>
+                                    <td>{{ t.no_cuenta_origen.no_cuenta }}</td>
+                                    <td>{{ t.fecha_hora }}</td>
+                                    <td>${{ t.monto|stringformat:'.2f'|intcomma }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr/>
+                    </div>
+                {% else %}
+                    <p><strong>No se ha realizado transferencias.</strong></p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-horizontal text-center" style="margin-top: 25px;">
+                <h3><a href="#" style="text-decoration:none;cursor:pointer;">Débito y crédito</a></h3>
+                <br/>
+                {% if debitos_creditos.count > 0 %}
+                    <div class="form-horizontal pre-scrollable" style="height: 150px;">
+                        <table class="table text-center table-hover table-striped table-bordered" >
+                            <thead class="thead-default">
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>No. cuenta</th>
+                                    <th>Fecha y hora</th>
+                                    <th>Descripción</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for db in debitos_creditos %}
+                                <tr>
+                                    {% if db.cod_tipo.cod_tipo == 1 %}
+                                        <td><span class="label label-success">{{ db.cod_tipo.descripcion }}</span></td>
+                                    {% else %}
+                                        <td><span class="label label-warning">{{ db.cod_tipo.descripcion }}</span></td>
+                                    {% endif %}
+                                    <td>{{ db.no_cuenta.no_cuenta }}</td>
+                                    <td>{{ db.fecha_hora }}</td>
+                                    <td>{{ db.descripcion }}</td> 
+                                    <td>${{ db.monto|stringformat:'.2f'|intcomma }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr/>
+                    </div>
+                {% else %}
+                    <p><strong>No se ha realizado créditos ni débitos.</strong></p>
+                {% endif %}
+            </div>            
+        </div>
+    </div>
+    <h4><br/><br/></h4><hr/>
+</div>
+{% endblock %}

@@ -30,8 +30,8 @@ class Tipo(models.Model):
 
 
 class Transaccion(models.Model):
-    no_cuenta = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta')
-    fecha_hora = models.DateTimeField(default=datetime.now, blank=True)
+    no_cuenta = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta', primary_key=True)
+    fecha_hora = models.DateTimeField(default=datetime.now, blank=True, primary_key=True)
     monto = models.FloatField()
     descripcion = models.CharField(max_length=100, blank=True, null=True)
     cod_tipo = models.ForeignKey(Tipo, models.DO_NOTHING, db_column='cod_tipo')
@@ -43,9 +43,9 @@ class Transaccion(models.Model):
 
 
 class Transferencia(models.Model):
-    no_cuenta_origen = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_origen', related_name='cuenta_origen')
-    no_cuenta_destino = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_destino', related_name='cuenta_destino')
-    fecha_hora = models.DateTimeField(default=datetime.now, blank=True)
+    no_cuenta_origen = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_origen', related_name='cuenta_origen', primary_key=True)
+    no_cuenta_destino = models.ForeignKey(Cuenta, models.DO_NOTHING, db_column='no_cuenta_destino', related_name='cuenta_destino', primary_key=True)
+    fecha_hora = models.DateTimeField(default=datetime.now, blank=True, primary_key=True)
     monto = models.FloatField()
 
     class Meta:

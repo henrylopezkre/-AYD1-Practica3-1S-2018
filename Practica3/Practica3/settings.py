@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'nose',
     'coverage',
     'main'
 ]
@@ -92,10 +93,6 @@ DATABASES = {
           'autocommit': True,
         },
     },
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': 'test.db', 
-    #}
 }
 
 # Password validation

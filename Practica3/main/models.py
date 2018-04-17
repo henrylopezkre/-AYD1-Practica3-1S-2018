@@ -13,7 +13,7 @@ from datetime import datetime
 class Cuenta(models.Model):
     no_cuenta = models.IntegerField(primary_key=True)
     codigo = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='codigo')
-    cantidad = models.FloatField()
+    cantidad = models.FloatField(default=1000.00)
 
     class Meta:
         managed = False
@@ -52,7 +52,6 @@ class Transferencia(models.Model):
         managed = False
         db_table = 'transferencia'
         unique_together = (('no_cuenta_origen', 'no_cuenta_destino', 'fecha_hora'),)
-
 
 class Usuario(models.Model):
     codigo = models.IntegerField(primary_key=True)

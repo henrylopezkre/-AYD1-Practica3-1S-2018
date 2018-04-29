@@ -12,17 +12,17 @@ def iniciar_sesion(request):
 	context = {}
 	if request.method == 'POST':
 		#CREDENCIALES
-		codigo = request.POST.get('codigo', '')
+		cod_usuario = request.POST.get('codigo', '')
 		nickname = request.POST.get('nickname', '')
 		contrasenia = request.POST.get('contrasenia', '')
-		usuario = Usuario.objects.all().filter(codigo=codigo, nickname=nickname, contrasenia=contrasenia).first()
+		usuario = Usuario.objects.all().filter(cod_usuario=cod_usuario, nickname=nickname, contrasenia=contrasenia).first()
 		if usuario is None:
 			context = {
 				'mensaje' : 'Credenciales no existen.'
 			}
 		else:
-			cuenta = Cuenta.objects.get(codigo=codigo)
-			request.session['codigo'] = usuario.codigo
+			cuenta = Cuenta.objects.get(cod_usuario=cod_usuario)
+			request.session['codigo'] = usuario.cod_usuario
 			request.session['nickname'] = usuario.nickname
 			request.session['no_cuenta'] = cuenta.no_cuenta
 			return redirect('main:principal')
@@ -38,7 +38,7 @@ def registrar(request):
 	context = {}
 	if request.method == 'POST':
 		#USUARIO
-		codigo = obtener_codigo()
+		cod_usuario = obtener_codigo()
 		nombre = request.POST.get('nombre', '')
 		apellido = request.POST.get('apellido', '')
 		nickname = request.POST.get('nickname', '').lower()
@@ -51,14 +51,14 @@ def registrar(request):
 		cantidad = 0.00
 		if usuario_obj is None:
 			if contrasenia == rep_contrasenia:
-				usuario_obj = Usuario(codigo=codigo, nombre=nombre, apellido=apellido, nickname=nickname, correo=correo, contrasenia=contrasenia)
+				usuario_obj = Usuario(cod_usuario=cod_usuario, nombre=nombre, apellido=apellido, nickname=nickname, correo=correo, contrasenia=contrasenia)
 				usuario_obj.save()
 				#CUENTA
-				if Usuario.objects.all().filter(codigo=codigo).exists():
-					cuenta_obj = Cuenta(no_cuenta=no_cuenta, codigo=usuario_obj, cantidad=cantidad)
+				if Usuario.objects.all().filter(cod_usuario=cod_usuario).exists():
+					cuenta_obj = Cuenta(no_cuenta=no_cuenta, cod_usuario=usuario_obj, cantidad=cantidad)
 					cuenta_obj.save()
 					context = {
-						'codigo' : str(codigo),
+						'codigo' : str(cod_usuario),
 						'no_cuenta' : str(no_cuenta)
 					}
 				else:
@@ -136,13 +136,13 @@ def debito_credito(request):
 		else:
 			cuenta1_obj = Cuenta.objects.get(no_cuenta=request.session['no_cuenta'])
 			if tipo_obj.cod_tipo == 1:
-				#if float(monto) > cuenta1_obj.cantidad:
-					#context = {
-					#	'error' : 'El monto solicitado es mayor al saldo de su cuenta.'
-					#}
-				#else:
-					#cuenta1_obj.cantidad = cuenta1_obj.cantidad-float(monto)
-					#cuenta1_obj.save()
+				if float(monto) > cuenta1_obj.cantidad:
+					context = {
+						'error' : 'El monto solicitado es mayor al saldo de su cuenta.'
+					}
+				else:
+					cuenta1_obj.cantidad = cuenta1_obj.cantidad-float(monto)
+					cuenta1_obj.save()
 					cuenta_obj.cantidad = cuenta_obj.cantidad+float(monto)
 					cuenta_obj.save()
 					context = {
@@ -156,6 +156,8 @@ def debito_credito(request):
 				else:
 					cuenta_obj.cantidad = cuenta_obj.cantidad-float(monto)
 					cuenta_obj.save()
+					cuenta1_obj.cantidad = cuenta1_obj.cantidad+float(monto)
+					cuenta1_obj.save()
 					context = {
 						'mensaje' : "Operación realizada correctamente."
 					}
@@ -170,4 +172,7 @@ def obtener_no_cuenta():
 
 def obtener_codigo():
 	usuario = Usuario.objects.all().last()
-	return usuario.codigo+1
+	return usuario.cod_usuario+1
+
+def obtener_cod(user):
+	return user.cod_usuario+1

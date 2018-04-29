@@ -83,14 +83,19 @@ WSGI_APPLICATION = 'Practica3.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'AYD1_Practica3',
+        'TEST': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_AYD1_Practica3',
+        },
         'USER': 'root',
         'PASSWORD': 'apologia94',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
-          'autocommit': True,
+          #'autocommit': True,
+          'init_command': 'SET default_storage_engine=INNODB',
         },
     },
 }

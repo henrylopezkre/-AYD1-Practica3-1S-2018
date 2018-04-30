@@ -85,10 +85,10 @@ DATABASES = {
     'default': {
         #'ENGINE': 'django.db.backends.mysql',
         #'NAME': 'AYD1_Practica3',
-        'TEST': {
+        #'TEST': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'test_AYD1_Practica3',
-        }
+        #},
         #'USER': 'root',
         #'PASSWORD': 'apologia94',
         #'HOST': 'localhost',

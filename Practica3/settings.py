@@ -87,7 +87,7 @@ DATABASES = {
         #'NAME': 'AYD1_Practica3',
         #'TEST': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'test_AYD1_Practica3'
+            'NAME': 'test_AYD1_Practica3',
         #},
         #'USER': 'root',
         #'PASSWORD': 'apologia94',

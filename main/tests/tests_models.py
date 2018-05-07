@@ -52,7 +52,7 @@ class ModelsTestCase(TestCase):
 
 	def test_debito_destino_exists(self):
 		deb = self.create_debito()
-		self.assertTrue(deb.no_cuenta.no_cuenta==1234567900)
+		self.assertTrue(deb.no_cuenta.no_cuenta!=1234567900)
 
 	def test_credito_destino_exists(self):
 		cred = self.create_credito()
